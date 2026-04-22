@@ -129,6 +129,6 @@ When running, the program provides these options:
 
 ## Authors
 
-Sehbaz Singh
-Sashank Rana
-Sahil Bhandari
+- Sehbaz Singh
+- Sashank Rana
+- Sahil Bhandari
