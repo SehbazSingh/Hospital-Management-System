@@ -127,6 +127,8 @@ When running, the program provides these options:
 - Update/delete operations for doctors, patients, and appointments
 - Better exception handling and logging
 
-## Author
+## Authors
 
 Sehbaz Singh
+Sashank Rana
+Sahil Bhandari
