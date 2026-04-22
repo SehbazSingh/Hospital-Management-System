@@ -73,21 +73,27 @@ CREATE TABLE IF NOT EXISTS appointments (
 
 ## Configuration
 
-Update database credentials in `src/util/DBConnection.java`:
+Set database credentials via environment variables:
 
-- `DEFAULT_URL`
-- `DEFAULT_USER`
-- `DEFAULT_PASSWORD`
+- `HMS_DB_URL` (default: `jdbc:mysql://localhost:3306/hospital_db`)
+- `HMS_DB_USER` (default: `root`)
+- `HMS_DB_PASSWORD` (default: empty)
 
-Current code expects:
-- Database: `hospital_db`
-- MySQL running on: `localhost:3306`
+PowerShell example:
+
+```powershell
+$env:HMS_DB_URL="jdbc:mysql://localhost:3306/hospital_db"
+$env:HMS_DB_USER="root"
+$env:HMS_DB_PASSWORD="your_password"
+```
+
+If you do not set these variables, the application uses the defaults shown above.
 
 ## How to Run
 
 1. Make sure Java and MySQL are installed.
 2. Add the MySQL JDBC driver to your classpath (or VS Code Java project dependencies).
-3. Configure credentials in `DBConnection.java`.
+3. Set `HMS_DB_URL`, `HMS_DB_USER`, and `HMS_DB_PASSWORD` in your terminal/session.
 4. Compile and run:
 
 ```powershell
@@ -120,7 +126,6 @@ When running, the program provides these options:
 - Input validation for date and numeric fields
 - Update/delete operations for doctors, patients, and appointments
 - Better exception handling and logging
-- Move sensitive DB credentials to environment variables or config file
 
 ## Author
 

@@ -1,0 +1,12 @@
+# Build output
+bin/
+
+# Compiled Java classes
+*.class
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
