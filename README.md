@@ -1,32 +1,34 @@
 # Hospital Management System
 
-A simple Java console-based Hospital Management System using MySQL and JDBC.
+A Java Swing-based Hospital Management System using MySQL and JDBC.
 
 This project allows you to:
-- Add and view doctors
-- Add and view patients
-- Create appointments by linking existing doctor and patient records
-- View all appointments with doctor and patient names
+- Add doctors, patients, and appointments from a desktop UI
+- View doctors, patients, and appointments in the output panel
+- Delete doctors, patients, and appointments by ID
+- Automatically remove linked appointments when deleting a doctor or patient
 
 ## Features
 
-- Menu-driven CLI application
+- Swing desktop interface with tab-based forms
 - MySQL database integration through JDBC
-- Basic validation for doctor and patient existence before booking appointments
-- Separate model and utility classes for cleaner structure
+- Validation for required fields and numeric IDs
+- Doctor/patient existence checks before booking appointments
+- Safe delete flow for foreign-key related records
 
 ## Tech Stack
 
 - Java
+- Swing
 - JDBC
 - MySQL
-- VS Code Java Project structure
 
 ## Project Structure
 
 ```text
 Hospital Management System/
 |-- src/
+|   |-- App.java
 |   |-- main/
 |   |   `-- Main.java
 |   |-- model/
@@ -36,6 +38,7 @@ Hospital Management System/
 |   `-- util/
 |       `-- DBConnection.java
 |-- lib/
+|   `-- mysql-connector-j-9.6.0.jar
 |-- bin/
 `-- README.md
 ```
@@ -49,25 +52,25 @@ CREATE DATABASE IF NOT EXISTS hospital_db;
 USE hospital_db;
 
 CREATE TABLE IF NOT EXISTS doctors (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(100) NOT NULL,
-	specialization VARCHAR(100) NOT NULL
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    specialization VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS patients (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(100) NOT NULL,
-	age INT NOT NULL,
-	disease VARCHAR(100) NOT NULL
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INT NOT NULL,
+    disease VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS appointments (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	doctor_id INT NOT NULL,
-	patient_id INT NOT NULL,
-	appointment_date DATETIME NOT NULL,
-	FOREIGN KEY (doctor_id) REFERENCES doctors(id),
-	FOREIGN KEY (patient_id) REFERENCES patients(id)
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    doctor_id INT NOT NULL,
+    patient_id INT NOT NULL,
+    appointment_date DATETIME NOT NULL,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id),
+    FOREIGN KEY (patient_id) REFERENCES patients(id)
 );
 ```
 
@@ -75,9 +78,9 @@ CREATE TABLE IF NOT EXISTS appointments (
 
 Set database credentials via environment variables:
 
-- `HMS_DB_URL` (default: `jdbc:mysql://localhost:3306/hospital_db`)
-- `HMS_DB_USER` (default: `root`)
-- `HMS_DB_PASSWORD` (default: empty)
+- HMS_DB_URL (default: jdbc:mysql://localhost:3306/hospital_db)
+- HMS_DB_USER (default: root)
+- HMS_DB_PASSWORD (default: empty)
 
 PowerShell example:
 
@@ -87,45 +90,49 @@ $env:HMS_DB_USER="root"
 $env:HMS_DB_PASSWORD="your_password"
 ```
 
-If you do not set these variables, the application uses the defaults shown above.
+If not set, defaults from DBConnection are used.
 
-## How to Run
+## How to Build and Run
 
-1. Make sure Java and MySQL are installed.
-2. Add the MySQL JDBC driver to your classpath (or VS Code Java project dependencies).
-3. Set `HMS_DB_URL`, `HMS_DB_USER`, and `HMS_DB_PASSWORD` in your terminal/session.
-4. Compile and run:
+From project root:
 
 ```powershell
-# From project root
-javac -d bin src\util\DBConnection.java src\model\Doctor.java src\model\Patient.java src\model\Appointment.java src\main\Main.java
-java -cp "bin;lib\*" main.Main
+javac -cp "lib\mysql-connector-j-9.6.0.jar" -d bin src\App.java src\main\Main.java src\util\DBConnection.java src\model\Appointment.java src\model\Doctor.java src\model\Patient.java
 ```
 
-If you run from VS Code, you can run `src/main/Main.java` directly using the Java extension after configuring dependencies.
+Run:
 
-## Menu Options
+```powershell
+$env:HMS_DB_URL="jdbc:mysql://localhost:3306/hospital_db"; $env:HMS_DB_USER="root"; $env:HMS_DB_PASSWORD="your_password"; java -cp "bin;lib\mysql-connector-j-9.6.0.jar" App
+```
 
-When running, the program provides these options:
+## UI Tabs and Actions
 
-- `1` Add Doctor
-- `2` Add Patient
-- `3` Display Doctors
-- `4` Display Patients
-- `5` Add Appointment
-- `6` Display Appointments
-- `10` Exit
+- Add Doctor
+- Add Patient
+- Add Appointment
+- Delete Records
+
+Bottom actions:
+
+- Display Doctors
+- Display Patients
+- Display Appointments
+- Clear Output
+- Exit
 
 ## Notes
 
-- Appointment input format in CLI: `YYYY-MM-DD HH:MM:SS`
-- IDs used while creating appointments must already exist in `doctors` and `patients` tables.
+- Appointment date input format: YYYY-MM-DD HH:MM:SS
+- Appointment creation requires existing doctor and patient IDs
+- Deleting a doctor or patient also deletes linked appointments first
 
 ## Future Improvements
 
-- Input validation for date and numeric fields
-- Update/delete operations for doctors, patients, and appointments
-- Better exception handling and logging
+- Date picker and stronger date validation
+- Edit/update operations for all entities
+- Search and filter support in UI
+- Improved logging and exception reporting
 
 ## Authors
 
